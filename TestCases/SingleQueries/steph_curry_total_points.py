@@ -17,25 +17,25 @@ DAG_DATA_STEPH = [
     ("player_minutes", "player_assists"),
     ("player_minutes", "did_steph_scored_more_than_23_points"),
     ("player_minutes", "player_rebounds"),
-    ("player_rebounds", "avg_team_rebounds"),
-    ("player_assists", "avg_team_assists"),
-    ("avg_rival_team_points", "rival_team_points"),     # Points scored influence the winner
-    ("avg_rival_team_rebounds", "rival_team_points"),
-    ("avg_rival_team_assists", "rival_team_points"),
+    ("player_rebounds", "total_team_rebounds"),
+    ("player_assists", "total_team_assists"),
+    ("total_rival_team_rebounds", "rival_team_points"),
+    ("total_rival_team_assists", "rival_team_points"),
     ("did_steph_scored_more_than_23_points", "team_points"),     # Points scored influence the winner
-    ("did_steph_scored_more_than_23_points", "avg_team_points"),
-    ("avg_team_points", "team_points"),
-    ("avg_team_rebounds", "team_points"),
-    ("avg_team_assists", "team_points"),]
-
-
-
+    ("total_team_rebounds", "team_points"),
+    ("total_team_assists", "team_points"),]
 
 def augment_steph_curry_dataset():
-    duplicated_games_scoring_rivals = pd.read_csv(f"{BASE_DIR}/game_player_stats_final.csv")
+    duplicated_games_scoring_rivals = pd.read_csv(f"{BASE_DIR}/game_player_stats_final_total.csv")
 
     steph_curry_data = duplicated_games_scoring_rivals[
         duplicated_games_scoring_rivals['player_name'] == "Stephen Curry"]
+
+    steph_curry_data.to_csv(f"{BASE_DIR}/steph_curry_data.csv", index=False)
+
+    #filter for games where 'team_name' column is as 'player_team' column
+    steph_curry_data = steph_curry_data[
+        steph_curry_data['team_name'] == steph_curry_data["player_team"]]
 
     # Filter out rows where minutes equals 0
     steph_curry_data = steph_curry_data[steph_curry_data['minutes'] > 0]
