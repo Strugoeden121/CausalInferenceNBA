@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from dowhy import CausalModel
-from utils.utils import is_treatment_significant, BASE_DIR
+from utils.utils import is_treatment_significant, BASE_DIR, nodes_to_remove_from_dag
 
 
 COLUMNS_TO_REMOVE_STEPH = ["winner_team", "assists", "rebounds", "points","minutes", "player_id",
     "season_name", "player_team"]
+
+NODES_TO_REMOVE = ['avg_team_points', 'player_name']
 
 
 DAG_DATA_STEPH = [
@@ -58,7 +60,8 @@ def augment_steph_curry_dataset():
 
 
 def augment_steph_dag():
-    dag_data = list(set(DAG_DATA_STEPH))
+    dag_data = nodes_to_remove_from_dag(DAG_DATA_STEPH, NODES_TO_REMOVE)
+    dag_data = list(set(dag_data))
     dag = nx.DiGraph(dag_data)
     print(f"Is Directed Acyclic Graph (DAG): {nx.is_directed_acyclic_graph(dag)}")
 

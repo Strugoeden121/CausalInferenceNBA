@@ -2,11 +2,20 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from dowhy import CausalModel
 
+BASE_DIR = "C:/Users/StrugoEden/PycharmProjects/CausalInferenceNBA/Datasets"
+
+def nodes_to_remove_from_dag(dag_data = [], nodes_to_remove = []):
+    new_dag = []
+    for source, dest in dag_data:
+        if source in nodes_to_remove or dest in nodes_to_remove:
+            continue
+        new_dag.append((source, dest))
+
+    return new_dag
+
 def is_treatment_significant(causal_estimate):
     p_value = causal_estimate.test_stat_significance()['p_value']
     return p_value is not None and p_value < 0.05
-
-BASE_DIR = "C:/Users/StrugoEden/PycharmProjects/CausalInferenceNBA/Datasets"
 
 def create_dag_generic(dag_data):
     dag_data = list(set(dag_data))
