@@ -9,6 +9,7 @@ COLUMNS_TO_REMOVE = ["player_id", "season_name", 'winner_team', 'team_name']
 
 def calculate_causal_durent_westbrook_ass(durent_westbrook_dataset, westbrook_assists, durent_points):
     print("creating Dataset")
+    durent_westbrook_dataset = durent_westbrook_dataset[(durent_westbrook_dataset['player_1_minutes'] > 0) & (durent_westbrook_dataset['player_2_minutes'] > 0)]
     column_name = f'westbrook_{westbrook_assists}ass+_durent_{durent_points}+'
     durent_westbrook_dataset[column_name] = (
                 (durent_westbrook_dataset['player_1_assists'] >= westbrook_assists) & (durent_westbrook_dataset['player_2_points'] >= durent_points)).astype(int)

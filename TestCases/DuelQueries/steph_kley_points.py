@@ -11,6 +11,7 @@ COLUMNS_TO_REMOVE = ["player_id", "season_name", 'winner_team', 'team_name']
 
 def calculate_causal_steph_kley(steph_kley_dataset, steph_points, kley_points):
     print("creating Dataset")
+    steph_kley_dataset = steph_kley_dataset[(steph_kley_dataset['player_1_minutes'] > 0) & (steph_kley_dataset['player_2_minutes'] > 0)]
     column_name = f'steph_{steph_points}+_kley_{kley_points}+'
     steph_kley_dataset[column_name] = (
                 (steph_kley_dataset['player_2_points'] >= steph_points) & (steph_kley_dataset['player_1_points'] >= kley_points)).astype(int)
