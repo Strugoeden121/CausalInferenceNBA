@@ -4,6 +4,7 @@ from utils.utils import BASE_DIR, is_treatment_significant
 import matplotlib.pyplot as plt
 import networkx as nx
 from dowhy import CausalModel
+from utils.constants import TEAM_NAMES_ABBR
 
 COLUMNS_TO_REMOVE = ["winner_team", "home_team", 'away_team', 'did_home_team_win']
 
@@ -57,6 +58,8 @@ def check_team_home_adventage(game_with_teams_dataset, lower_team_name):
         print(
             f'Treatment: {treatment_column_name}, Outcome: {outcome_column_name}, ATE: Not significant, p-value: {causal_estimate.test_stat_significance()["p_value"]}')
 
+    return causal_estimate.value
+
 
 if __name__ == "__main__":
     print("Treatment - Team playing at home")
@@ -67,9 +70,22 @@ if __name__ == "__main__":
 
     print("First Case - Golden State Warriors")
     check_team_home_adventage(game_with_teams_dataset, "gsw")
-    print("First Case - Utah Jazz")
+    print("Second Case - Utah Jazz")
     check_team_home_adventage(game_with_teams_dataset, "uta")
-    print("First Case - Los Angeles Clippers")
+    print("Third Case - Los Angeles Clippers")
     check_team_home_adventage(game_with_teams_dataset, "lac")
-    print("First Case - Denver Nuggets")
+    print("Forth Case - Denver Nuggets")
     check_team_home_adventage(game_with_teams_dataset, "den")
+    print("Fifth Case - Sacramento Kings")
+    check_team_home_adventage(game_with_teams_dataset, "sac")
+
+    team_to_ate = {}
+    sum = 0
+    for name in TEAM_NAMES_ABBR:
+        team_to_ate[name] = check_team_home_adventage(game_with_teams_dataset, name)
+        sum += team_to_ate[name]
+
+    sorted_team_to_ate = dict(sorted(team_to_ate.items(), key=lambda x: x[1], reverse=True))
+    print(f"Sorted Teams:{sorted_team_to_ate}")
+    print("\n")
+    print(f"mean is {sum/len(team_to_ate)}")
